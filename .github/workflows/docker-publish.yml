@@ -31,6 +31,7 @@ jobs:
           tags: lwatts93/lemuelwatts:latest
           
   deploy-website:
+    needs: build-and-push
     runs-on: ubuntu-latest
     steps:
       # Droplets already have docker, doctl + auth, and curl installed
