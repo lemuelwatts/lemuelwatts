@@ -1,0 +1,51 @@
+name: Build and Push Docker Image and Deploy Website
+
+on:
+  push:
+    branches:
+      - master 
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: lwatts93/lemuelwatts:latest
+          
+  deploy-website:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy website to DigitalOcean Droplet
+        uses: appleboy/ssh-action@v1.2.1
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: root
+          key: ${{ secrets.DO_KEY }}
+          port: 22
+          script: |
+            docker pull lwatts93/lemuelwatts:latest
+
+            docker stop lemuelwatts || true
+            docker rm lemuelwatts || true
+
+            echo "starting server instance..."
+            docker run -d --name lemuelwatts -p 8080:8080 lwatts93/lemuelwatts:latest
