@@ -1,11 +1,89 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import '../styles/styles.css';
 ---
 
 <Layout>
-	<Welcome />
+  <div class="menu-icon" id="menuButton">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>
+
+  <nav id="nav-menu" class="side-menu hidden">
+    <ul>
+      <li><a href="#about" onclick="toggleMenu()">About</a></li>
+      <li><a href="#projects" onclick="toggleMenu()">Projects</a></li>
+      <li><a href="#skills" onclick="toggleMenu()">Skills</a></li>
+      <li><a href="#contact" onclick="toggleMenu()">Contact</a></li>
+      <li><a href="/resume" onclick="toggleMenu()">Resume</a></li>
+    </ul>
+  </nav>
+
+  <div class="content-wrapper">
+    <header>
+      <h1>Welcome to Lemuel Watts' Personal Website</h1>
+      <p>Software Engineer</p>
+    </header>
+
+    <section id="about">
+      <h2>About Me</h2>
+      <p>Hello! I'm Lemuel Watts, a passionate sofware engineer with experience in creating dynamic and complex programs. I love coding and tinkering with the web.</p>
+    </section>
+
+    <section id="projects">
+      <h2>Projects</h2>
+      <ul>
+        <li><strong>Project 1:</strong> Description of project 1.</li>
+        <li><strong>Project 2:</strong> Description of project 2.</li>
+        <li><strong>Project 3:</strong> Description of project 3.</li>
+      </ul>
+    </section>
+
+    <section id="skills">
+      <h2>Skills</h2>
+      <ul>
+        <li>Java</li>
+        <li>Python</li>
+        <li>Docker</li>
+        <li>Kubernetes</li>
+        <li>AWS/GCS</li>
+		<li>Git</li>
+		<li>Kafka</li>
+      </ul>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>You can reach me at <a href="mailto:nope@nope.com">nope@nope.com</a></p>
+    </section>
+  </div>
 </Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const menuButton = document.getElementById('menuButton');
+    const menu = document.getElementById('nav-menu');
+    const content = document.querySelector('.content-wrapper');
+
+    if (menuButton && menu && content) {
+      // Toggle menu on button click
+      menuButton.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+        menuButton.classList.toggle('active');
+      });
+
+      // Close menu when clicking on the overlay
+      content.addEventListener('click', (e) => {
+        if (menu.classList.contains('hidden')) return;
+        menu.classList.add('hidden');
+        menuButton.classList.remove('active');
+      });
+
+      // Prevent menu from closing when clicking inside it
+      menu.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+    }
+  });
+</script>
