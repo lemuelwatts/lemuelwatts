@@ -1,0 +1,21 @@
+name: Cleanup Untagged Docker Images
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at midnight (UTC)
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Connect to server and remove untagged images
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: root
+          key: ${{ secrets.DO_KEY }}
+          script: |
+            docker images -f "dangling=true" -q | xargs -r docker rmi
+            echo "Untagged images removed!"
