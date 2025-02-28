@@ -29,3 +29,27 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: lwatts93/lemuelwatts:latest
+          
+  deploy-website:
+    runs-on: ubuntu-latest
+    steps:
+      # Droplets already have docker, doctl + auth, and curl installed
+      - name: Deploy api to DigitalOcean Droplet
+        uses: appleboy/ssh-action@v1.2.1
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: root
+          key: ${{ secrets.DO_KEY }}
+          port: 22
+          script: |
+            docker pull lwatts93/lemuelwatts:latest
+
+            docker stop lemuelwatts || true
+            docker rm lemuelwatts || true
+
+            echo "starting server instance..."
+            docker run -d \
+            --restart always \            
+            -p 8080:8080 \
+            --name lemuelwatts \
+            lwatts93/lemuelwatts:latest
