@@ -34,8 +34,7 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
-      # Droplets already have docker, doctl + auth, and curl installed
-      - name: Deploy api to DigitalOcean Droplet
+      - name: Deploy website to DigitalOcean Droplet
         uses: appleboy/ssh-action@v1.2.1
         with:
           host: ${{ secrets.DO_HOST }}
