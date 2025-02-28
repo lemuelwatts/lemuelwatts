@@ -49,8 +49,4 @@ jobs:
             docker rm lemuelwatts || true
 
             echo "starting server instance..."
-            docker run -d \
-            --restart always \            
-            -p 8080:8080 \
-            --name lemuelwatts \
-            lwatts93/lemuelwatts:latest
+            docker run -d --name lemuelwatts -p 8080:8080 lwatts93/lemuelwatts:latest
