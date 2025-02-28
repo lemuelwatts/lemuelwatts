@@ -26,6 +26,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Dockerfile  # Ensure this is correct
+          file: ./Dockerfile
           push: true
           tags: lwatts93/lemuelwatts:latest
