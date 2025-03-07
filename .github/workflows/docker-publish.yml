@@ -45,6 +45,7 @@ jobs:
             docker pull lwatts93/lemuelwatts:latest
 
             docker stop lemuelwatts || true
+            docker wait lemuelwatts || true
             docker rm lemuelwatts || true
 
             echo "starting server instance..."
